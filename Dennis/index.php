@@ -26,13 +26,30 @@
 
 	$(document).ready(function() {
 	
+	$('#event-form').submit(function (e) {
+	  e.preventDefault();
+	  $.ajax({
+	    type: 'post',
+	    url: 'submit-event.php',
+	    data: $(this).serialize(),
+	    success: function () {
+	    					$('#myModal').modal('hide');
+	    					$('#calendar').fullCalendar('refetchEvents');
+	    }
+	  });
+	})
 		var calendar = $('#calendar').fullCalendar({
 		
 			selectable: true,
 			selectHelper: true,
 			select: function(start, end, allDay) {
 				$('#myModal').modal('show');
-				$('.modal-title').html(start)
+				$('.modal-title').html(start);
+				var date = start.getDate();
+				var month = start.getMonth() + 1; //Months are zero based
+				var year = start.getFullYear();
+				var date =  year + '-' + ('0' + (month)).slice(-2) + '-' + ('0' + date).slice(-2);
+				$('#start').val(date);
 			},
 
 			editable: true,
@@ -79,7 +96,6 @@
 <body>
 <div id='loading' style='display:none'>loading...</div>
 <div id='calendar'></div>
-
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -88,7 +104,46 @@
         <h4 class="modal-title" id="myModalLabel"></h4>
       </div>
       <div class="modal-body">
-        Nothing in here yet...
+		<form id="event-form" class="form-horizontal" role="form" action="#">
+		  <div class="form-group">
+		    <label for="title" class="col-sm-3 control-label">Title</label>
+		    <div class="col-sm-8">
+		      <input type="text" class="form-control" id="title" name="title" placeholder="Enter title">
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="start" class="col-sm-3 control-label">Start Date</label>
+		    <div class="col-sm-8">
+		      <input type="date" class="form-control" id="start" name="start" placeholder="Enter date">
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="end" class="col-sm-3 control-label">End Date</label>
+		    <div class="col-sm-8">
+		      <input type="date" class="form-control" id="end" name="end" placeholder="Enter date">
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="url" class="col-sm-3 control-label">URL</label>
+		    <div class="col-sm-8">
+		      <input type="url" class="form-control" id="url" name="url" placeholder="Enter url">
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <div class="col-sm-offset-2 col-sm-10">
+		      <div class="checkbox">
+		        <label>
+		          <input id="allDay" name="allDay" type="checkbox"> All day event?
+		        </label>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <div class="col-sm-offset-2 col-sm-10">
+		      <button type="submit" class="btn btn-default">Submit</button>
+		    </div>
+		  </div>
+		</form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
