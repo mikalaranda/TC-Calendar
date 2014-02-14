@@ -1,26 +1,21 @@
 <?php
-	function csv_to_array($filename='', $delimiter=',')
-	{
-	    if(!file_exists($filename) || !is_readable($filename))
-	        return FALSE;
+	// Create connection
+	$con=mysqli_connect("localhost","root","root","TC-Calendar");
 
-	    $header = NULL;
-	    $data = array();
-	    if (($handle = fopen($filename, 'r')) !== FALSE)
-	    {
-	        while (($row = fgetcsv($handle, 1000, $delimiter)) !== FALSE)
-	        {
-	            if(!$header)
-	                $header = $row;
-	            else
-	                $data[] = array_combine($header, $row);
-	        }
-	        fclose($handle);
-	    }
-	    return $data;
+	// Check connection
+	if (mysqli_connect_errno())
+	{
+		echo "Failed to connect to MySQL: " . mysqli_connect_error();
+	}
+	$result = mysqli_query($con,"SELECT * FROM events");
+	
+	$data = array();
+	while($row = mysqli_fetch_assoc($result))
+	{
+		$data[] = $row;
 	}
 
-	$dat_array = csv_to_array('./calendar.dat', ', ');
-	echo json_encode($dat_array);
+	mysqli_close($con);
 
+	echo json_encode($data);
 ?>
