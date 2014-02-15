@@ -57,10 +57,25 @@ $(document).ready(function() {
 		events: "dat-events.php",
 
 		eventDrop: function(event, delta) {
-			alert(event.title + ' was moved ' + delta + ' days\n' +
-				'(should probably update your database)');
+			$.ajax({
+				type: 'post',
+				url: 'update-event.php',
+				data: {id: event.id, dayDelta: delta, updateType: 'drop'},
+				success: function (result) {
+					// alert(result);
+				}
+			});
 		},
-
+	    eventResize: function(event,delta) {
+			$.ajax({
+				type: 'post',
+				url: 'update-event.php',
+				data: {id: event.id, dayDelta: delta, updateType: 'resize'},
+				success: function (result) {
+					// alert(result);
+				}
+			});
+	    },
 		loading: function(bool) {
 			if (bool){
 				$('.progress').show();
