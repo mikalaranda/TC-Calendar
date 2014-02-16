@@ -83,7 +83,14 @@ $(document).ready(function() {
 			else{
 				$('.progress').hide();
 			}
-		}
+		},
+		eventClick: function(calEvent, jsEvent, view) {
+			$('#eventViewModal').modal('show');
+			$('.modal-title').html(calEvent.title);
+			$('#eventViewStart').html(calEvent.start);
+			$('#eventViewEnd').html(calEvent.end);
+			$('#eventViewURL').html(calEvent.URL);
+	    }
 
 	});
 
@@ -117,6 +124,7 @@ body {
 		<div class='progress-bar'  role='progressbar' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100' style='width: 100%'></div>
 	</div>
 	<div id='calendar'></div>
+	<? include 'event-view-modal.php' ?>
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
