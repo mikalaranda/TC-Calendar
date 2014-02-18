@@ -2,7 +2,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+<style>
+.datepicker {z-index: 1151 !important;}
+</style>
 <!-- Bootstrap -->
 <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
 
@@ -13,6 +15,7 @@
 <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->  
 <!-- end Bootstrap -->
+<link href='./assets/css/datepicker3.css' rel='stylesheet' />
 
 <link href='./assets/css/fullcalendar.css' rel='stylesheet' />
 <link href='./assets/css/fullcalendar.print.css' rel='stylesheet' media='print' />
@@ -22,11 +25,36 @@
 <script src="./assets/js/bootstrap.min.js"></script>
 <script src='./assets/js/jquery-ui.custom.min.js'></script>
 <script src='./assets/js/fullcalendar.min.js'></script>
+<script src='./assets/js/bootstrap-datepicker.js'></script>
 
 <script>
 
 $(document).ready(function() {
+	$('#end').datepicker({
+		format: 'yyyy-mm-dd'
+	});
+	$('#start').datepicker({
+		format: 'yyyy-mm-dd'
+	});
 
+	$('#start').datepicker().on('changeDate', function(e){
+		var start_date = $('#start').datepicker('getDate');
+		var end_date = $('#end').datepicker('getDate');
+		// if end date is less than start date, remove it
+		if (start_date > end_date)
+			$('#end').datepicker('update', e.date);
+    });
+
+    $('#end').datepicker().on('changeDate', function(e){
+		var start_date = $('#start').datepicker('getDate');
+		var end_date = $('#end').datepicker('getDate');
+		// if end date is less than start date, remove it
+		if (end_date < start_date)
+			$('#start').datepicker('update', e.date);
+
+    });
+
+	//This is executed when the user submits/updates events
 	$('#event-form').submit(function (e) {
 		e.preventDefault();
 		$.ajax({
@@ -40,6 +68,8 @@ $(document).ready(function() {
 			}
 		});
 	})
+
+	//This is executed when a user clicks the edit event button.
 	$('#view-event-form').submit(function (e) {
 		e.preventDefault();
 		$.ajax({
@@ -52,6 +82,7 @@ $(document).ready(function() {
 				var start_arr = start.split(' ');
 				var end = result[0].end;
 				var end_arr = end.split(' ');
+				$('#eventSubmitModal .event-modal-title').html("Edit Event");
 				$('#eventViewModal').modal('hide');
 				$('#update').val(result[0].id);
 				$('#title').val(result[0].title);
@@ -72,11 +103,13 @@ $(document).ready(function() {
 		select: function(start, end, allDay) {
 			$('#event-form')[0].reset();
 			$('#event-form #update').val('0');
-			$('.event-modal-title').html(start);
+			$('.event-modal-title').html("Create New Event");
 			var date = start.getDate();
 			var month = start.getMonth() + 1; //Months are zero based
 			var year = start.getFullYear();
 			var date =  year + '-' + ('0' + (month)).slice(-2) + '-' + ('0' + date).slice(-2);
+			$('#start').datepicker('update', date);
+			$('#end').datepicker('update', date);
 			$('#start').val(date);
 			$('#eventSubmitModal').modal('show');
 		},
@@ -124,8 +157,6 @@ $(document).ready(function() {
 				$('#eventViewAllday').html("Yes");
 			else
 				$('#eventViewAllday').html("No");
-
-
 	    }
 
 	});
