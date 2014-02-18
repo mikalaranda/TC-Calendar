@@ -36,7 +36,31 @@ $(document).ready(function() {
 			success: function (result) {
 				$('#eventSubmitModal').modal('hide');
 				$('#calendar').fullCalendar('refetchEvents');
-				$('.errors').html(result);
+				// $('.errors').html(result);
+				// alert(result);
+			}
+		});
+	})
+	$('#view-event-form').submit(function (e) {
+		e.preventDefault();
+		$.ajax({
+			type: 'post',
+			url: 'get-event.php',
+			data: $(this).serialize(),
+			dataType: 'json',
+			success: function (result) {
+				var start = result[0].start;
+				var start_arr = start.split(' ');
+				var end = result[0].end;
+				var end_arr = end.split(' ');
+				$('#eventViewModal').modal('hide');
+				$('#update').val(result[0].id);
+				$('#title').val(result[0].title);
+				$('#start').val(start_arr[0]);
+				$('#end').val(end_arr[0]);
+				$('#url').val(result[0].URL);
+
+				$('#eventSubmitModal').modal('show');
 			}
 		});
 	})
@@ -45,13 +69,14 @@ $(document).ready(function() {
 		selectable: true,
 		selectHelper: true,
 		select: function(start, end, allDay) {
-			$('#eventSubmitModal').modal('show');
+			$('#event-form')[0].reset();
 			$('.event-modal-title').html(start);
 			var date = start.getDate();
 			var month = start.getMonth() + 1; //Months are zero based
 			var year = start.getFullYear();
 			var date =  year + '-' + ('0' + (month)).slice(-2) + '-' + ('0' + date).slice(-2);
 			$('#start').val(date);
+			$('#eventSubmitModal').modal('show');
 		},
 
 		editable: true,
@@ -88,6 +113,7 @@ $(document).ready(function() {
 		},
 		eventClick: function(calEvent) {
 			$('#eventViewModal').modal('show');
+			$('#hidden_id').val(calEvent.id);
 			$('.modal-title').html(calEvent.title);
 			$('#eventViewStart').html(calEvent.start);
 			$('#eventViewEnd').html(calEvent.end);

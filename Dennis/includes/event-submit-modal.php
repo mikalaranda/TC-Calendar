@@ -2,6 +2,7 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<form id="event-form" class="form-horizontal" role="form" action="#">
+				<input type="hidden" id="update" name="update" value="0">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="event-modal-title" id="eventSubmitModalLabel"></h4>

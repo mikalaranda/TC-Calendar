@@ -20,17 +20,34 @@
 
 		public function Submit() {
 
-			if ($stmt = $this->con->prepare("INSERT INTO events (title, start, end) VALUES (?, ?, ?)")) {
+			if($_POST['update'] == '0')
+			{
+				if ($stmt = $this->con->prepare("INSERT INTO events (title, start, end) VALUES (?, ?, ?)")) {
 
-			    /* bind parameters for markers */
-			    $stmt->bind_param("sss", $_POST['title'],$_POST['start'],$_POST['end']);
+				    /* bind parameters for markers */
+				    $stmt->bind_param("sss", $_POST['title'],$_POST['start'],$_POST['end']);
 
-				/* Execute it */
-				$stmt->execute();
+					/* Execute it */
+					$stmt->execute();
 
-				/* Close statement */
-				$stmt -> close();
+					/* Close statement */
+					$stmt -> close();
+				}	
+			}else{
+				if ($stmt = $this->con->prepare("UPDATE events SET title = ?, start = ?, end = ? where id = ?")) {
+
+				    /* bind parameters for markers */
+				    $stmt->bind_param("ssss", $_POST['title'],$_POST['start'],$_POST['end'], $_POST['update']);
+
+					/* Execute it */
+					$stmt->execute();
+
+					/* Close statement */
+					$stmt -> close();
+				}	
+
 			}
+
 		}
 
 		public function Drop() {
