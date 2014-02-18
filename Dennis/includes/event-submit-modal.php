@@ -33,12 +33,9 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<div class="col-sm-offset-2 col-sm-10">
-							<div class="checkbox">
-								<label>
-									<input id="allDay" name="allDay" type="checkbox" value="1"> All day event?
-								</label>
-							</div>
+						<label for="allDay" class="col-sm-3 control-label">All Day</label>
+						<div class="col-sm-8">
+							<input id="allDay" name="allDay" type="checkbox" value="1">
 						</div>
 					</div>
 				</div>
