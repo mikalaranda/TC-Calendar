@@ -36,7 +36,7 @@
 						<div class="col-sm-offset-2 col-sm-10">
 							<div class="checkbox">
 								<label>
-									<input id="allDay" name="allDay" type="checkbox"> All day event?
+									<input id="allDay" name="allDay" type="checkbox" value="1"> All day event?
 								</label>
 							</div>
 						</div>

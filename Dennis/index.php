@@ -36,8 +36,7 @@ $(document).ready(function() {
 			success: function (result) {
 				$('#eventSubmitModal').modal('hide');
 				$('#calendar').fullCalendar('refetchEvents');
-				// $('.errors').html(result);
-				// alert(result);
+				//alert(result);
 			}
 		});
 	})
@@ -59,6 +58,8 @@ $(document).ready(function() {
 				$('#start').val(start_arr[0]);
 				$('#end').val(end_arr[0]);
 				$('#url').val(result[0].URL);
+				if(result[0].allDay == 1)
+					$('#allDay').prop('checked', true);
 
 				$('#eventSubmitModal').modal('show');
 			}
@@ -70,6 +71,7 @@ $(document).ready(function() {
 		selectHelper: true,
 		select: function(start, end, allDay) {
 			$('#event-form')[0].reset();
+			$('#event-form #update').val('0');
 			$('.event-modal-title').html(start);
 			var date = start.getDate();
 			var month = start.getMonth() + 1; //Months are zero based
@@ -118,6 +120,12 @@ $(document).ready(function() {
 			$('#eventViewStart').html(calEvent.start);
 			$('#eventViewEnd').html(calEvent.end);
 			$('#eventViewURL').html(calEvent.URL);
+			if(calEvent.allDay == 1)
+				$('#eventViewAllday').html("Yes");
+			else
+				$('#eventViewAllday').html("No");
+
+
 	    }
 
 	});

@@ -3,10 +3,10 @@ class Database
 {
     var $conn = null;
     var $config = array(
-        'username' => 'dechen_tc',
-        'password' => 'tccalendar',
-        'hostname' => 'dennischen.com',
-        'database' => 'dechen_tccalendar'
+        'username' => 'root',
+        'password' => 'root',
+        'hostname' => 'localhost',
+        'database' => 'TC-Calendar'
     );
 
     function __construct() {

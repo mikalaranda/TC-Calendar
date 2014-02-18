@@ -22,10 +22,10 @@
 
 			if($_POST['update'] == '0')
 			{
-				if ($stmt = $this->con->prepare("INSERT INTO events (title, start, end) VALUES (?, ?, ?)")) {
+				if ($stmt = $this->con->prepare("INSERT INTO events (title, start, end, URL, allDay) VALUES (?, ?, ?, ?, ?)")) {
 
 				    /* bind parameters for markers */
-				    $stmt->bind_param("sss", $_POST['title'],$_POST['start'],$_POST['end']);
+				    $stmt->bind_param("sssss", $_POST['title'],$_POST['start'],$_POST['end'],$_POST['url'],$_POST['allDay']);
 
 					/* Execute it */
 					$stmt->execute();
@@ -34,10 +34,10 @@
 					$stmt -> close();
 				}	
 			}else{
-				if ($stmt = $this->con->prepare("UPDATE events SET title = ?, start = ?, end = ? where id = ?")) {
+				if ($stmt = $this->con->prepare("UPDATE events SET title = ?, start = ?, end = ?, URL = ?, allDay = ? where id = ?")) {
 
 				    /* bind parameters for markers */
-				    $stmt->bind_param("ssss", $_POST['title'],$_POST['start'],$_POST['end'], $_POST['update']);
+				    $stmt->bind_param("ssssss", $_POST['title'],$_POST['start'],$_POST['end'],$_POST['url'],$_POST['allDay'], $_POST['update']);
 
 					/* Execute it */
 					$stmt->execute();

@@ -20,6 +20,10 @@
 						<div class ="col-md-2 text-right">URL:</div>
 						<div class ="col-md-8 text-left" id="eventViewURL"></div>
 					</div>
+					<div class="row">
+						<div class ="col-md-2 text-right">All Day:</div>
+						<div class ="col-md-8 text-left" id="eventViewAllday"></div>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
