@@ -26,6 +26,7 @@
 <script src='./assets/js/jquery-ui.custom.min.js'></script>
 <script src='./assets/js/fullcalendar.min.js'></script>
 <script src='./assets/js/bootstrap-datepicker.js'></script>
+<script src='./assets/js/gcal.js'></script>
 
 <script>
 
@@ -54,6 +55,27 @@ $(document).ready(function() {
 
     });
 
+    $('#google-calendar-button').click(function(){
+    	$('#googleCalendarSubmitModal').modal('show');
+    });
+
+	//This is executed when the user submits google calendar
+	$('#google-calendar-form').submit(function (e) {
+		e.preventDefault();
+		$.ajax({
+			type: 'post',
+			url: 'submit-event.php',
+			data: $(this).serialize() + "&type=google",
+			success: function (result) {
+				$('#googleCalendarSubmitModal').modal('hide');
+				$('#google-calendar-form')[0].reset();
+				alert("submitted");
+				getEvents();
+				//alert(result);
+			}
+		});
+	})
+
 	//This is executed when the user submits/updates events
 	$('#event-form').submit(function (e) {
 		e.preventDefault();
@@ -63,7 +85,7 @@ $(document).ready(function() {
 			data: $(this).serialize() + "&type=submit",
 			success: function (result) {
 				$('#eventSubmitModal').modal('hide');
-				$('#calendar').fullCalendar('refetchEvents');
+				$('#calendar').fullCalendar('refetchEvents'); //same here
 				//alert(result);
 			}
 		});
@@ -96,6 +118,32 @@ $(document).ready(function() {
 			}
 		});
 	})
+
+	function getEvents(){
+			//get db events
+			var JSONEvents = 
+				
+					[{
+						url: "dat-events.php",
+						color: "yellow",
+						textColor: "black"
+					}]
+				;
+			var googleEvents;
+			$.ajax({
+				type: 'post',
+				url: 'get-google-events.php',
+				dataType: 'json',
+				success: function (result) {
+					for ( var i = 0; i < result.length; i++ ) {
+						$('#calendar').fullCalendar( 'addEventSource', result[i] );
+					}
+					$('#calendar').fullCalendar( 'refetchEvents' )
+				}
+			});
+			return JSONEvents;
+	}
+
 	var calendar = $('#calendar').fullCalendar({
 
 		selectable: true,
@@ -116,7 +164,7 @@ $(document).ready(function() {
 
 		editable: true,
 
-		events: "dat-events.php",
+		eventSources: getEvents(),
 
 		eventDrop: function(event, delta) {
 			$.ajax({
@@ -152,11 +200,12 @@ $(document).ready(function() {
 			$('.modal-title').html(calEvent.title);
 			$('#eventViewStart').html(calEvent.start);
 			$('#eventViewEnd').html(calEvent.end);
-			$('#eventViewURL').html(calEvent.URL);
+			$('#eventViewURL').html("<a href='"+calEvent.url+"' target='_blank'>Link</a>");
 			if(calEvent.allDay == 1)
 				$('#eventViewAllday').html("Yes");
 			else
 				$('#eventViewAllday').html("No");
+			return false;
 	    }
 
 	});
@@ -188,11 +237,15 @@ body {
 </head>
 <body>
 	<div class="errors"></div>
-	<div class='progress progress-striped active' style='display:none'>
-		<div class='progress-bar'  role='progressbar' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100' style='width: 100%'></div>
-	</div>
+	<button type="button" id="google-calendar-button" class="btn btn-default btn-lg">
+		Link Google Calendar
+	</button>
+	<!-- <div class='progress progress-striped active' style='display:none'>
+		<div class='progress-bar' role='progressbar' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100' style='width: 100%'></div>
+	</div> -->
 	<div id='calendar'></div>
 	<?php include 'includes/event-view-modal.php' ?>
 	<?php include 'includes/event-submit-modal.php' ?>
+	<?php include 'includes/google-calendar-submit-modal.php' ?>
 </body>
 </html>
