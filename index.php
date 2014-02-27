@@ -66,12 +66,11 @@ $(document).ready(function() {
 			type: 'post',
 			url: 'submit-event.php',
 			data: $(this).serialize() + "&type=google",
+					dataType: 'json',
 			success: function (result) {
 				$('#googleCalendarSubmitModal').modal('hide');
 				$('#google-calendar-form')[0].reset();
-				alert("submitted");
-				getEvents();
-				//alert(result);
+				$('#calendar').fullCalendar( 'addEventSource', result[0] );
 			}
 		});
 	})
@@ -83,6 +82,7 @@ $(document).ready(function() {
 			type: 'post',
 			url: 'submit-event.php',
 			data: $(this).serialize() + "&type=submit",
+					dataType: 'json',
 			success: function (result) {
 				$('#eventSubmitModal').modal('hide');
 				$('#calendar').fullCalendar('refetchEvents'); //same here
@@ -122,7 +122,6 @@ $(document).ready(function() {
 	function getEvents(){
 			//get db events
 			var JSONEvents = 
-				
 					[{
 						url: "dat-events.php",
 						color: "yellow",

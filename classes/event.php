@@ -27,6 +27,18 @@
 				/* Execute it */
 				$stmt->execute();
 
+				
+				
+				$result = mysqli_query($this->con,"SELECT * FROM googleCalendars WHERE id = ". $stmt ->insert_id);
+
+				$data = array();
+				while($row = mysqli_fetch_assoc($result))
+				{
+					$data[] = $row;
+				}
+				
+				$this->result = json_encode($data);
+				
 				/* Close statement */
 				$stmt -> close();
 			}	
