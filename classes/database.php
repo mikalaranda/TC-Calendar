@@ -4,7 +4,7 @@ class Database
     var $conn = null;
     var $config = array(
         'username' => 'root',
-        'password' => '',
+        'password' => 'root',
         'hostname' => 'localhost',
         'database' => 'TC-Calendar'
     );

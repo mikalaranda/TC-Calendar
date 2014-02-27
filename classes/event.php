@@ -19,6 +19,9 @@
 		}
 
 		public function Google() {
+
+			$table = "googleCalendars";
+
 			if ($stmt = $this->con->prepare("INSERT INTO googleCalendars(url) VALUES (?)")) {
 
 			    /* bind parameters for markers */
@@ -27,17 +30,8 @@
 				/* Execute it */
 				$stmt->execute();
 
-				
-				
-				$result = mysqli_query($this->con,"SELECT * FROM googleCalendars WHERE id = ". $stmt ->insert_id);
-
-				$data = array();
-				while($row = mysqli_fetch_assoc($result))
-				{
-					$data[] = $row;
-				}
-				
-				$this->result = json_encode($data);
+				/* Get result */
+				$this->getSubmitResult($stmt, $table, $stmt->insert_id);
 				
 				/* Close statement */
 				$stmt -> close();
@@ -45,6 +39,8 @@
 		}
 
 		public function Submit() {
+
+			$table = "events";
 
 			if($_POST['update'] == '0')
 			{
@@ -55,6 +51,9 @@
 
 					/* Execute it */
 					$stmt->execute();
+
+					/* Get result */
+					$this->getSubmitResult($stmt, $table, $stmt->insert_id);
 
 					/* Close statement */
 					$stmt -> close();
@@ -67,6 +66,9 @@
 
 					/* Execute it */
 					$stmt->execute();
+					
+					/* Get result */
+					$this->getSubmitResult($stmt, $table, $_POST['update']);
 
 					/* Close statement */
 					$stmt -> close();
@@ -74,6 +76,18 @@
 
 			}
 
+		}
+
+		public function getSubmitResult($stmt, $table, $id) {
+			$result = mysqli_query($this->con,"SELECT * FROM " . $table . " WHERE id = " . $id);
+
+			$data = array();
+			while($row = mysqli_fetch_assoc($result))
+			{
+				$data[] = $row;
+			}
+			
+			$this->result = $data;
 		}
 
 		public function Drop() {

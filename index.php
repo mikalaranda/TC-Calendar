@@ -66,7 +66,7 @@ $(document).ready(function() {
 			type: 'post',
 			url: 'submit-event.php',
 			data: $(this).serialize() + "&type=google",
-					dataType: 'json',
+			dataType: 'json',
 			success: function (result) {
 				$('#googleCalendarSubmitModal').modal('hide');
 				$('#google-calendar-form')[0].reset();
@@ -77,16 +77,26 @@ $(document).ready(function() {
 
 	//This is executed when the user submits/updates events
 	$('#event-form').submit(function (e) {
+		var update = $("#event-form #update").val();
 		e.preventDefault();
 		$.ajax({
 			type: 'post',
 			url: 'submit-event.php',
 			data: $(this).serialize() + "&type=submit",
-					dataType: 'json',
+			dataType: 'json',
 			success: function (result) {
 				$('#eventSubmitModal').modal('hide');
-				$('#calendar').fullCalendar('refetchEvents'); //same here
-				//alert(result);
+				console.log(JSON.stringify(result))
+				if(update == 0)
+					$('#calendar').fullCalendar( 'renderEvent', result[0], true )
+				else{
+					var event = $('#calendar').fullCalendar( 'clientEvents' ,update );
+					$.each(result[0], function(k, v) {
+						var obj = {};
+						event[0][k] = v;
+					});
+					$('#calendar').fullCalendar('updateEvent', event[0]);
+				}
 			}
 		});
 	})
@@ -123,9 +133,7 @@ $(document).ready(function() {
 			//get db events
 			var JSONEvents = 
 					[{
-						url: "dat-events.php",
-						color: "yellow",
-						textColor: "black"
+						url: "dat-events.php"
 					}]
 				;
 			var googleEvents;
