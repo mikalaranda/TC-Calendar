@@ -15,6 +15,7 @@
 <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->  
 <!-- end Bootstrap -->
+<link href='./assets/css/custom.css' rel='stylesheet' />
 <link href='./assets/css/datepicker3.css' rel='stylesheet' />
 
 <link href='./assets/css/fullcalendar.css' rel='stylesheet' />
@@ -31,6 +32,8 @@
 <script>
 
 $(document).ready(function() {
+	$('.fc-header-title').append("test")
+
 	$('#end').datepicker({
 		format: 'yyyy-mm-dd'
 	});
@@ -179,7 +182,7 @@ $(document).ready(function() {
 				url: 'submit-event.php',
 				data: {id: event.id, dayDelta: delta, type: 'drop'},
 				success: function (result) {
-					$('.errors').html(result);
+					//$('.errors').html(result);
 				}
 			});
 		},
@@ -189,7 +192,7 @@ $(document).ready(function() {
 				url: 'submit-event.php',
 				data: {id: event.id, dayDelta: delta, type: 'resize'},
 				success: function (result) {
-					$('.errors').html(result);
+					//$('.errors').html(result);
 				}
 			});
 	    },
@@ -213,46 +216,40 @@ $(document).ready(function() {
 			else
 				$('#eventViewAllday').html("No");
 			return false;
-	    }
+	    },
+	    viewRender: function(view, element) { 
+            $('.fc-header-title span').append("TEST" ); 
+        } 
 
 	});
 
 });
 
 </script>
-<style>
 
-body {
-	margin-top: 40px;
-	text-align: center;
-	font-size: 14px;
-	font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
-}
-
-#loading {
-	position: absolute;
-	top: 5px;
-	right: 5px;
-}
-
-#calendar {
-	width: 900px;
-	margin: 0 auto;
-}
-
-</style>
 </head>
 <body>
-	<div class="errors"></div>
-	<button type="button" id="google-calendar-button" class="btn btn-default btn-lg">
-		Link Google Calendar
-	</button>
-	<!-- <div class='progress progress-striped active' style='display:none'>
-		<div class='progress-bar' role='progressbar' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100' style='width: 100%'></div>
-	</div> -->
-	<div id='calendar'></div>
-	<?php include 'includes/event-view-modal.php' ?>
-	<?php include 'includes/event-submit-modal.php' ?>
-	<?php include 'includes/google-calendar-submit-modal.php' ?>
+	<div class="container">
+		<div class="header">
+			<ul class="nav nav-pills pull-right">
+				<li class="active"><a href="#">Home</a></li>
+				<li><a href="#">About</a></li>
+				<li><a href="#">Contact</a></li>
+			</ul>
+			<h3 class="text-muted">
+				<img class = "tclogo" src = "http://www.tzuchi.org.sg/eng/images/intro/edu/jy006logo.jpg">
+				TC-Calendar
+			</h3>
+		</div>
+		<div class="errors"></div>
+		<div id='calendar'></div>
+		<?php include 'includes/event-view-modal.php' ?>
+		<?php include 'includes/event-submit-modal.php' ?>
+		<?php include 'includes/google-calendar-submit-modal.php' ?>
+		<br> <button type="button" class="btn btn-default" id="google-calendar-button">Link Google Calendar</button>
+		<div class="footer">
+			<p>&copy; Michael Aranda &amp; Dennis Chen 2014</p>
+		</div>
+	</div>
 </body>
 </html>
