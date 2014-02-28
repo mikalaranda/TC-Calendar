@@ -1,4 +1,5 @@
-<?php require('classes/database.php'); ?>
+<?php require('./classes/database.php'); ?>
+<?php include"./includes/session.php"; ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,11 +29,89 @@
 <script src='./assets/js/fullcalendar.min.js'></script>
 <script src='./assets/js/bootstrap-datepicker.js'></script>
 <script src='./assets/js/gcal.js'></script>
+<script src='./assets/js/jquery.validate.min.js'></script>
 
 <script>
 
 $(document).ready(function() {
-	$('.fc-header-title').append("test")
+
+	$('#register-btn').click(function(){
+		$('#registrationModal').modal('show');
+	});
+
+	$('#registration-form').validate({
+		//debug: true,
+		rules: {
+			username: {
+				required: true,
+				minlength: 6
+			},
+			password: {
+				required: true,
+				minlength: 6
+			},
+			email: {
+				required: true,
+				email: true
+			}
+		},
+		messages: {
+			username: {
+				required: "Please specify a username",
+				minlength: "Username has to be more than 6 characters long."
+			},
+			password: {
+				required: "Please specify a password",
+				minlength: "Password has to be more than 6 characters long."
+			},
+			email: {
+				required: "We need your email address to contact you",
+				email: "Your email address must be in the format of name@domain.com"
+			}
+		},
+	    submitHandler: function(form) {
+			$.ajax({
+				type: 'post',
+				url: 'submit-user.php',
+				data: $("#registration-form").serialize() + "&type=register",
+				success: function (result) {
+					if(result == "Success"){
+						$('#registrationModal').modal('hide');
+						$('#registration-form')[0].reset();
+					}else{
+						$("#registrationModal #error").html(result);
+					}
+				}
+			});
+	    }
+	});
+
+	$("#login-form").submit(function(e) {
+		e.preventDefault();
+		$.ajax({
+			type: 'post',
+			url: 'submit-user.php',
+			data: $(this).serialize() + "&type=login",
+			success: function (result) {
+				if(result == "Success")
+					location.reload();
+				else
+					alert(result)
+			}
+		});
+	});
+	
+	$("#logout").submit(function(e){
+		e.preventDefault();
+		$.ajax({
+			type: 'post',
+			url: 'submit-user.php',
+			data: $(this).serialize() + "&type=logout",
+			success: function (result) {
+				location.reload();
+			}
+		});
+	});
 
 	$('#end').datepicker({
 		format: 'yyyy-mm-dd'
@@ -155,7 +234,12 @@ $(document).ready(function() {
 	}
 
 	var calendar = $('#calendar').fullCalendar({
-
+		header:
+			{
+			left:   'title today',
+			center: '',
+			right:  'month,agendaWeek,agendaDay prev,next'
+			},
 		selectable: true,
 		selectHelper: true,
 		select: function(start, end, allDay) {
@@ -218,7 +302,7 @@ $(document).ready(function() {
 			return false;
 	    },
 	    viewRender: function(view, element) { 
-            $('.fc-header-title span').append("TEST" ); 
+            //$('.fc-header-title span').append("TEST" ); 
         } 
 
 	});
@@ -232,20 +316,43 @@ $(document).ready(function() {
 	<div class="container">
 		<div class="header">
 			<ul class="nav nav-pills pull-right">
-				<li class="active"><a href="#">Home</a></li>
-				<li><a href="#">About</a></li>
-				<li><a href="#">Contact</a></li>
+			
+			<?php if(!empty($_SESSION['LoggedIn']) && !empty($_SESSION['Username'])){?>
+ 				<li>
+	 				<form class="navbar-form navbar-right" name="logout" id="logout">
+	 					<button type="submit" id="" class="btn btn-success">Log Out</button>
+	 				</form>
+	 			</li>
+			<?php }else{ ?>
+				<li>
+					<form class="navbar-form navbar-right" role="form" name="loginform" id="login-form">
+						<div class="form-group">
+							<input type="text" placeholder="Username" name="username" id="username" class="form-control">
+						</div>
+						<div class="form-group">
+							<input type="password" placeholder="Password" name="password" id="password" class="form-control">
+						</div>
+						<button type="submit" class="btn btn-success">Sign in</button>
+					</form>
+				</li>
+				<li>
+					<button class="btn btn-success registerbtn" id="register-btn">Register</button>
+				</li>
+			<?php } ?>
+		
 			</ul>
-			<h3 class="text-muted">
+			<h1 class="text-muted">
 				<img class = "tclogo" src = "http://www.tzuchi.org.sg/eng/images/intro/edu/jy006logo.jpg">
 				TC-Calendar
-			</h3>
+			</h1>
+
 		</div>
 		<div class="errors"></div>
 		<div id='calendar'></div>
 		<?php include 'includes/event-view-modal.php' ?>
 		<?php include 'includes/event-submit-modal.php' ?>
 		<?php include 'includes/google-calendar-submit-modal.php' ?>
+		<?php include 'includes/registration-modal.php' ?>
 		<br> <button type="button" class="btn btn-default" id="google-calendar-button">Link Google Calendar</button>
 		<div class="footer">
 			<p>&copy; Michael Aranda &amp; Dennis Chen 2014</p>
