@@ -255,9 +255,13 @@ $(document).ready(function() {
 			$('#start').val(date);
 			$('#eventSubmitModal').modal('show');
 		},
-
-		editable: true,
-
+		//this is a really ugly implementation of login check to see if calendar is editable..
+		//please fix this by making eventdrop and eventresize validate user.
+		<?php if(empty($_SESSION['LoggedIn']) && empty($_SESSION['Username'])){?>
+			editable: false,
+		<?php }else{ ?>
+			editable: true,
+		<?php } ?>
 		eventSources: getEvents(),
 
 		eventDrop: function(event, delta) {
@@ -350,10 +354,12 @@ $(document).ready(function() {
 		<div class="errors"></div>
 		<div id='calendar'></div>
 		<?php include 'includes/event-view-modal.php' ?>
-		<?php include 'includes/event-submit-modal.php' ?>
-		<?php include 'includes/google-calendar-submit-modal.php' ?>
+		<?php if(!empty($_SESSION['LoggedIn']) && !empty($_SESSION['Username'])){
+				include ('includes/event-submit-modal.php');
+				include ('includes/google-calendar-submit-modal.php');?>
+				<br> <button type="button" class="btn btn-default" id="google-calendar-button">Link Google Calendar</button>
+		<?php } ?>
 		<?php include 'includes/registration-modal.php' ?>
-		<br> <button type="button" class="btn btn-default" id="google-calendar-button">Link Google Calendar</button>
 		<div class="footer">
 			<p>&copy; Michael Aranda &amp; Dennis Chen 2014</p>
 		</div>
