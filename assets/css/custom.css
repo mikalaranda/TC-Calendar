@@ -26,14 +26,16 @@ body {
 
 /* Custom page header */
 .header {
+  overflow: hidden;
   border-bottom: 1px solid #e5e5e5;
 }
 /* Make the masthead heading the same height as the navigation */
-.header h1 {
-  padding-bottom: 0px;
-  margin-top: 0;
-  margin-bottom: 0;
-  line-height: 40px;
+.navleft h1, .navleft img{
+  float:left;
+}
+.navleft h1{
+  margin-top:13px;
+  
 }
 
 /* Custom page footer */
@@ -46,7 +48,7 @@ body {
 
 /* Customize container */
 @media (min-width: 768px) {
-  .container {
+  .container-fluid {
     max-width: 1000px;
   }
 }

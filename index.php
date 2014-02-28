@@ -317,7 +317,7 @@ $(document).ready(function() {
 
 </head>
 <body>
-	<div class="container">
+	<div class="container-fluid">
 		<div class="header">
 			<ul class="nav nav-pills pull-right">
 			
@@ -345,11 +345,10 @@ $(document).ready(function() {
 			<?php } ?>
 		
 			</ul>
-			<h1 class="text-muted">
+			<div class="navleft text-muted pull-left">
 				<img class = "tclogo" src = "http://www.tzuchi.org.sg/eng/images/intro/edu/jy006logo.jpg">
-				TC-Calendar
-			</h1>
-
+				<h1>TC-Calendar</h1>
+			</div>
 		</div>
 		<div class="errors"></div>
 		<div id='calendar'></div>
