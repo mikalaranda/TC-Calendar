@@ -3,10 +3,10 @@ class Database
 {
     var $conn = null;
     var $config = array(
-        'username' => 'root',
-        'password' => 'root',
+        'username' => 'michaela',
+        'password' => 'Jopu9*ejtA5w',
         'hostname' => 'localhost',
-        'database' => 'TC-Calendar'
+        'database' => 'michaela_tccalendar'
     );
 
     function __construct() {

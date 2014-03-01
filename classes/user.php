@@ -26,6 +26,7 @@
 
 			$checklogin = mysqli_query($this->con, "SELECT * FROM users WHERE Username = '".$username."' AND Password = '".$password."'");
 
+			// Successful login
 			if(mysqli_num_rows($checklogin) == 1)
 			{
 				$row = mysqli_fetch_array($checklogin);
@@ -37,9 +38,17 @@
 
 				$this->result = "Success";
 			}
+
+			// Unsuccessful login: One of the fields is empty
+			else if((strlen($username) == 0) || strlen(($password) == 0))
+			{
+				$this->result = "Please enter your username and password.";
+			}
+
+			// Unsuccessful login: Invalid username and password combination
 			else
 			{
-				$this->result = "Error";
+				$this->result = "Incorrect username/password. Please try entering your information again.";
 			}
 		}
 
