@@ -2,7 +2,7 @@
 
 class EventsController extends AppController {
 	public $helpers = array('Html', 'Form', 'Session');
-    public $components = array('Session');
+    public $components = array('Session', 'RequestHandler');
 
     public function index() {
         $this->set('events', $this->Event->find('all'));
@@ -31,5 +31,4 @@ class EventsController extends AppController {
         }
     }
 }
-
 ?>

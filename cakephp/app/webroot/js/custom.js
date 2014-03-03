@@ -181,21 +181,21 @@ $(document).ready(function() {
 			//get db events
 			var JSONEvents = 
 					[{
-						url: "dat-events.php"
+						url: "events.json"
 					}]
 				;
-			var googleEvents;
-			$.ajax({
-				type: 'post',
-				url: 'get-google-events.php',
-				dataType: 'json',
-				success: function (result) {
-					for ( var i = 0; i < result.length; i++ ) {
-						$('#calendar').fullCalendar( 'addEventSource', result[i] );
-					}
-					$('#calendar').fullCalendar( 'refetchEvents' )
-				}
-			});
+			// var googleEvents;
+			// $.ajax({
+			// 	type: 'post',
+			// 	url: '<?php echo Router::url(array('controller'=>'Events','action'=>'index'));?>',
+			// 	dataType: 'json',
+			// 	success: function (result) {
+			// 		for ( var i = 0; i < result.length; i++ ) {
+			// 			$('#calendar').fullCalendar( 'addEventSource', result[i] );
+			// 		}
+			// 		$('#calendar').fullCalendar( 'refetchEvents' )
+			// 	}
+			// });
 			return JSONEvents;
 	}
 
@@ -221,7 +221,7 @@ $(document).ready(function() {
 			$('#start').val(date);
 			$('#eventSubmitModal').modal('show');
 		},
-		editable: true,
+			editable: true,
 		eventSources: getEvents(),
 
 		eventDrop: function(event, delta) {
