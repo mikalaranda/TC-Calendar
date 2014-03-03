@@ -1,0 +1,13 @@
+classes/database.php
+
+# OSX files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must ends with two \r.
+Icon
+
+
+# Thumbnails
+._*

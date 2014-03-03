@@ -3,18 +3,11 @@ class Database
 {
     var $conn = null;
     var $config = array(
-<<<<<<< HEAD
-        'username' => 'michaela',
-        'password' => 'Jopu9*ejtA5w',
-        'hostname' => 'localhost',
-        'database' => 'michaela_tccalendar'
-=======
-        'username' => 'root',
+        'username' => '',
         'password' => '',
-        'hostname' => 'localhost',
-        'database' => 'tc-calendar'
+        'hostname' => '',
+        'database' => ''
 
->>>>>>> Included database template and updated readme
     );
 
     function __construct() {
