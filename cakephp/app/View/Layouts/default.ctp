@@ -1,61 +1,81 @@
-<?php
-/**
- *
- *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       app.View.Layouts
- * @since         CakePHP(tm) v 0.10.0.1076
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
-
-$cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework');
-?>
 <!DOCTYPE html>
 <html>
 <head>
 	<?php echo $this->Html->charset(); ?>
 	<title>
-		<?php echo $cakeDescription ?>:
 		<?php echo $title_for_layout; ?>
 	</title>
 	<?php
 		echo $this->Html->meta('icon');
 
-		echo $this->Html->css('cake.generic');
+		echo $this->Html->css('bootstrap.min');
+		echo $this->Html->css('custom');
+		echo $this->Html->css('datepicker3');
+		echo $this->Html->css('fullcalendar');
+		echo $this->Html->css('fullcalendar.print');
+		//echo $this->Html->css('cake.generic');
 
+		echo $this->Html->script('https://code.jquery.com/jquery.js');
+		echo $this->Html->script('bootstrap.min');
+		echo $this->Html->script('jquery-ui.custom.min');
+		echo $this->Html->script('fullcalendar.min');
+		echo $this->Html->script('bootstrap-datepicker');
+		echo $this->Html->script('gcal');
+		echo $this->Html->script('jquery.validate.min');
+		echo $this->Html->script('custom');
+		
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
 		echo $this->fetch('script');
 	?>
 </head>
 <body>
-	<div id="container">
-		<div id="header">
-			<h1><?php echo $this->Html->link($cakeDescription, 'http://cakephp.org'); ?></h1>
+	<div class="container-fluid">
+		<div class="header">
+			<ul class="nav nav-pills pull-right">
+			
+			<?php if(!empty($_SESSION['LoggedIn']) && !empty($_SESSION['Username'])){?>
+ 				<li>
+	 				<form class="navbar-form navbar-right" name="logout" id="logout">
+	 					<button type="submit" id="" class="btn btn-success">Log Out</button>
+	 				</form>
+	 			</li>
+			<?php }else{ ?>
+				<li>
+					<form class="navbar-form navbar-right" role="form" name="loginform" id="login-form">
+						<div class="form-group">
+							<input type="text" placeholder="Username" name="username" id="username" class="form-control">
+						</div>
+						<div class="form-group">
+							<input type="password" placeholder="Password" name="password" id="password" class="form-control">
+						</div>
+						<button type="submit" class="btn btn-success">Sign in</button>
+					</form>
+				</li>
+				<li>
+					<button class="btn btn-success registerbtn" id="register-btn">Register</button>
+				</li>
+			<?php } ?>
+		
+			</ul>
+			<div class="navleft text-muted pull-left">
+				<img class = "tclogo" src = "http://www.tzuchi.org.sg/eng/images/intro/edu/jy006logo.jpg">
+				<h1>TC-Calendar</h1>
+			</div>
 		</div>
-		<div id="content">
+		<?php echo $this->Session->flash(); ?>
+		<?php echo $this->fetch('content'); ?>
 
-			<?php echo $this->Session->flash(); ?>
-
-			<?php echo $this->fetch('content'); ?>
-		</div>
-		<div id="footer">
-			<?php echo $this->Html->link(
-					$this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
-					'http://www.cakephp.org/',
-					array('target' => '_blank', 'escape' => false)
-				);
-			?>
+		<div class="footer">
+			<p>&copy; Michael Aranda &amp; Dennis Chen 2014</p>
 		</div>
 	</div>
-	<?php echo $this->element('sql_dump'); ?>
+	<button id="foo">test</button>
+	<?php 		$this->Js->get('#foo')->event('click', 'alert("whoa!");', false);
+
+		echo $this->element('sql_dump'); 
+		echo $this->Js->writeBuffer(); // Write cached scripts
+	?>
 </body>
 </html>
+
