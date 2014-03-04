@@ -51,6 +51,10 @@ $(document).ready(function() {
 	    }
 	});
 
+	$('#event-form').validate({
+
+	});
+
 	$("#login-form").submit(function(e) {
 		e.preventDefault();
 		$.ajax({
@@ -248,13 +252,18 @@ $(document).ready(function() {
 
 //This is executed when the user submits/updates events
 //need to check alert state of callback
-function submitSuccess(result) {
-	alert(result);
+function submitSuccess(result,update) {
+	//$( "body" ).replaceWith( result );
+	//alert(result);
+	alert(result)
+	console.log(result);
 	$('#eventSubmitModal').modal('hide');
-	console.log(JSON.stringify(result))
-	if(update == 0)
-		$('#calendar').fullCalendar( 'renderEvent', result[0], true )
-	else{
+	//console.log(JSON.stringify(result))
+	if(update == '0'){
+		alert('new event');
+		$('#calendar').fullCalendar( 'renderEvent', result, true )
+	}else if(update == '1'){
+		alert('udapted event');
 		var event = $('#calendar').fullCalendar( 'clientEvents' ,update );
 		$.each(result[0], function(k, v) {
 			var obj = {};

@@ -22,11 +22,14 @@ class EventsController extends AppController {
 
     public function add() {
         if ($this->request->is('ajax')) {
+            $this->autoRender = false;
             $this->Event->create();
             if ($this->Event->save($this->request->data)) {
-                return $this->Event;
+                $event = $this->Event->findById($this->Event->id)['Event'];
+                echo json_encode($event);
             }
-            return 'Fail';
+            else 
+                $this->response->statusCode(400);
         }
     }
 }

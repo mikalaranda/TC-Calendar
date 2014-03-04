@@ -44,11 +44,12 @@ $this->Js->get('#event-form')->event(
     	'controller' => 'events'
     ),
     array(
+    	'type' => 'json',
         'data' => $data,
         'async' => true,    
         'dataExpression'=>true,
         'method' => 'POST',
-    	'success' => 'submitSuccess(data)'
+    	'success' => 'submitSuccess(data,0)'
     )
   )
 );
