@@ -20,16 +20,42 @@ class EventsController extends AppController {
         $this->set('event', $event);
     }
 
-    public function add() {
+    public function submit() {
         if ($this->request->is('ajax')) {
             $this->autoRender = false;
-            $this->Event->create();
-            if ($this->Event->save($this->request->data)) {
-                $event = $this->Event->findById($this->Event->id)['Event'];
-                echo json_encode($event);
+            if($this->data['Event']['update_id'] == '0'){
+                $this->Event->create();
+                if ($this->Event->save($this->request->data)) {
+                    $event = $this->Event->findById($this->Event->id)['Event'];
+                    $event['update'] = false;
+                    echo json_encode($event);
+                }
+                else 
+                    $this->response->statusCode(400);
+            }else{
+                $event = $this->Event->findById($this->data['Event']['update_id']);
+                if(!$event){
+                    $this->response->statusCode(400); 
+                }
+                $this->Event->id = $this->data['Event']['update_id'];
+                if ($this->Event->save($this->request->data)) {
+                    $event = $this->Event->findById($this->Event->id)['Event'];
+                    $event['update'] = true;
+                    echo json_encode($event);
+                }
             }
-            else 
+        }
+    }
+
+    public function getEvent($id = null){
+        if ($this->request->is('ajax')) {   
+            $this->autoRender = false;
+            $event = $this->Event->findById($this->data['Edit']['hidden_id'])['Event'];
+            if ($event) {
+                echo json_encode($event);
+            }else{
                 $this->response->statusCode(400);
+            }
         }
     }
 }

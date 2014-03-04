@@ -3,6 +3,7 @@
 		<div class="modal-content">
 			<?php echo $this->Form->create('Event', array(
 				'class' => 'form-horizontal',
+				'novalidate' => true,
 				'id' => 'event-form',
 				'inputDefaults' => array(
 				'format' => array('before', 'label', 'between', 'input', 'after'),
@@ -17,7 +18,7 @@
 				</div>
 				<div class="modal-body">
 					<?php 
-						echo $this->Form->input('update', array('type' => 'hidden', 'value' => '0'));
+						echo $this->Form->input('update_id', array('type' => 'hidden', 'value' => '0'));
 						echo $this->Form->input('title', array('label' => array('class' => 'col-sm-3 control-label'), 'class' => 'form-control'));
 						echo $this->Form->input('start', array('label' => array('class' => 'col-sm-3 control-label'), 'class' => 'form-control', 'type'=> 'text'));
 						echo $this->Form->input('end', array('label' => array('class' => 'col-sm-3 control-label'), 'class' => 'form-control', 'type'=> 'text'));
@@ -40,7 +41,7 @@ $this->Js->get('#event-form')->event(
    'submit',
    $this->Js->request(
     array(
-    	'action' => 'add', 
+    	'action' => 'submit', 
     	'controller' => 'events'
     ),
     array(
@@ -49,7 +50,7 @@ $this->Js->get('#event-form')->event(
         'async' => true,    
         'dataExpression'=>true,
         'method' => 'POST',
-    	'success' => 'submitSuccess(data,0)'
+    	'success' => 'submitSuccess(data)'
     )
   )
 );

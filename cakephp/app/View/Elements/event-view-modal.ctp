@@ -1,8 +1,8 @@
 <div class="modal fade" id="eventViewModal" tabindex="-1" role="dialog" aria-labelledby="eventViewModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form id="view-event-form" class="form-horizontal" role="form" action="#">
-				<input type="hidden" id="hidden_id" name="id">
+			<?php echo $this->Form->create('Edit', array('id' => 'event-view-form')); ?>
+				<?php echo $this->Form->input('hidden_id', array('type' => 'hidden', 'value' => '0', 'id' => 'hidden_id')); ?>
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title" id="eventViewModalLabel"></h4>
@@ -27,11 +27,31 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<?php if(!empty($_SESSION['LoggedIn']) && !empty($_SESSION['Username'])){?>
-						<button type="submit" class="btn btn-primary">Edit</button>
-					<?php } ?>
+					<button type="submit" class="btn btn-primary">Edit</button>
 				</div>
-			</form>
+			<?php echo $this->Form->end(); ?>
 		</div>
 	</div>
 </div>
+
+<?php
+$data = $this->Js->get('#event-view-form')->serializeForm(array('isForm' => true, 'inline' => true));
+$this->Js->get('#event-view-form')->event(
+   'submit',
+   $this->Js->request(
+    array(
+    	'action' => 'getEvent', 
+    	'controller' => 'events'
+    ),
+    array(
+       	'type' => 'json',
+        'data' => $data,
+        'async' => true,    
+        'dataExpression'=>true,
+        'method' => 'POST',
+    	'success' => 'loadEvent(data)'
+    )
+  )
+);
+echo $this->Js->writeBuffer(); 
+?>

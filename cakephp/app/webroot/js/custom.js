@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+	$('#event-form').validate();
+
 	$('#register-btn').click(function(){
 		$('#registrationModal').modal('show');
 	});
@@ -51,9 +53,6 @@ $(document).ready(function() {
 	    }
 	});
 
-	$('#event-form').validate({
-
-	});
 
 	$("#login-form").submit(function(e) {
 		e.preventDefault();
@@ -126,34 +125,6 @@ $(document).ready(function() {
 		});
 	})
 
-	//This is executed when a user clicks the edit event button.
-	$('#view-event-form').submit(function (e) {
-		e.preventDefault();
-		$.ajax({
-			type: 'post',
-			url: 'get-event.php',
-			data: $(this).serialize(),
-			dataType: 'json',
-			success: function (result) {
-				var start = result[0].start;
-				var start_arr = start.split(' ');
-				var end = result[0].end;
-				var end_arr = end.split(' ');
-				$('#eventSubmitModal .event-modal-title').html("Edit Event");
-				$('#eventViewModal').modal('hide');
-				$('#update').val(result[0].id);
-				$('#title').val(result[0].title);
-				$('#start').val(start_arr[0]);
-				$('#end').val(end_arr[0]);
-				$('#url').val(result[0].URL);
-				if(result[0].allDay == 1)
-					$('#allDay').prop('checked', true);
-
-				$('#eventSubmitModal').modal('show');
-			}
-		});
-	})
-
 	function getEvents(){
 			//get db events
 			var JSONEvents = 
@@ -187,7 +158,7 @@ $(document).ready(function() {
 		selectHelper: true,
 		select: function(start, end, allDay) {
 			$('#event-form')[0].reset();
-			$('#event-form #update').val('0');
+			$('#event-form #EventUpdateId').val('0');
 			$('.event-modal-title').html("Create New Event");
 			var date = start.getDate();
 			var month = start.getMonth() + 1; //Months are zero based
@@ -251,24 +222,35 @@ $(document).ready(function() {
 });
 
 //This is executed when the user submits/updates events
-//need to check alert state of callback
-function submitSuccess(result,update) {
-	//$( "body" ).replaceWith( result );
-	//alert(result);
-	alert(result)
-	console.log(result);
+function submitSuccess(result) {
 	$('#eventSubmitModal').modal('hide');
-	//console.log(JSON.stringify(result))
-	if(update == '0'){
-		alert('new event');
+	if(result.update == false){
 		$('#calendar').fullCalendar( 'renderEvent', result, true )
-	}else if(update == '1'){
-		alert('udapted event');
-		var event = $('#calendar').fullCalendar( 'clientEvents' ,update );
-		$.each(result[0], function(k, v) {
+	}else if(result.update == true){
+		var event = $('#calendar').fullCalendar( 'clientEvents' ,result.id );
+		$.each(result, function(k, v) {
 			var obj = {};
 			event[0][k] = v;
 		});
 		$('#calendar').fullCalendar('updateEvent', event[0]);
 	}
+}
+
+//This is executed when a user clicks the edit event button.
+function loadEvent (result) {
+	console.log(result);
+	var start = result.start;
+	var start_arr = start.split(' ');
+	var end = result.end;
+	var end_arr = end.split(' ');
+	$('#eventSubmitModal .event-modal-title').html("Edit Event");
+	$('#eventViewModal').modal('hide');
+	$('#EventUpdateId').val(result.id);
+	$('#EventTitle').val(result.title);
+	$('#EventStart').val(start_arr[0]);
+	$('#EventEnd').val(end_arr[0]);
+	$('#EventUrl').val(result.url);
+	if(result.allDay == 1)
+		$('#EventAllDay').prop('checked', true);
+	$('#eventSubmitModal').modal('show');
 }

@@ -69,9 +69,7 @@
 			<p>&copy; Michael Aranda &amp; Dennis Chen 2014</p>
 		</div>
 	</div>
-	<button id="foo">test</button>
-	<?php 		$this->Js->get('#foo')->event('click', 'alert("whoa!");', false);
-
+	<?php
 		echo $this->element('sql_dump'); 
 		echo $this->Js->writeBuffer(); // Write cached scripts
 	?>
