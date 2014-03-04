@@ -11,13 +11,13 @@
 				'between' => '<div class="col-sm-8">',
 				'after' => '</div>'
 			)));?>
-				<input type="hidden" id="update" name="update" value="0">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="event-modal-title" id="eventSubmitModalLabel"></h4>
 				</div>
 				<div class="modal-body">
 					<?php 
+						echo $this->Form->input('update', array('type' => 'hidden', 'value' => '0'));
 						echo $this->Form->input('title', array('label' => array('class' => 'col-sm-3 control-label'), 'class' => 'form-control'));
 						echo $this->Form->input('start', array('label' => array('class' => 'col-sm-3 control-label'), 'class' => 'form-control', 'type'=> 'text'));
 						echo $this->Form->input('end', array('label' => array('class' => 'col-sm-3 control-label'), 'class' => 'form-control', 'type'=> 'text'));
@@ -29,7 +29,28 @@
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					<button type="submit" class="btn btn-primary">Submit</button>
 				</div>
-			</form>
+			<?php echo $this->Form->end(); ?>
 		</div>
 	</div>
 </div>
+
+<?php
+$data = $this->Js->get('#event-form')->serializeForm(array('isForm' => true, 'inline' => true));
+$this->Js->get('#event-form')->event(
+   'submit',
+   $this->Js->request(
+    array(
+    	'action' => 'add', 
+    	'controller' => 'events'
+    ),
+    array(
+        'data' => $data,
+        'async' => true,    
+        'dataExpression'=>true,
+        'method' => 'POST',
+    	'success' => 'submitSuccess(data)'
+    )
+  )
+);
+echo $this->Js->writeBuffer(); 
+?>

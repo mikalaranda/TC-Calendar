@@ -1,7 +1,7 @@
 <?php
 
 class EventsController extends AppController {
-	public $helpers = array('Html', 'Form', 'Session');
+	public $helpers = array('Html', 'Form', 'Session', 'Js' => array('Jquery'));
     public $components = array('Session', 'RequestHandler');
 
     public function index() {
@@ -21,13 +21,12 @@ class EventsController extends AppController {
     }
 
     public function add() {
-        if ($this->request->is('post')) {
+        if ($this->request->is('ajax')) {
             $this->Event->create();
             if ($this->Event->save($this->request->data)) {
-                $this->Session->setFlash(__('Your event has been saved.'));
-                return $this->redirect(array('action' => 'index'));
+                return $this->Event;
             }
-            $this->Session->setFlash(__('Unable to add your event.'));
+            return 'Fail';
         }
     }
 }

@@ -5,7 +5,7 @@ class Event extends AppModel {
         'title' => array(
             'rule' => 'notEmpty'
         ),
-        'url' => array(
+        'start' => array(
             'rule' => 'notEmpty'
         )
     );

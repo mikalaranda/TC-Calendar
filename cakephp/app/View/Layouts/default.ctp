@@ -12,8 +12,7 @@
 		echo $this->Html->css('custom');
 		echo $this->Html->css('datepicker3');
 		echo $this->Html->css('fullcalendar');
-		echo $this->Html->css('fullcalendar.print');
-		//echo $this->Html->css('cake.generic');
+		echo $this->Html->css('fullcalendar.print', array('media' => 'print'));
 
 		echo $this->Html->script('https://code.jquery.com/jquery.js');
 		echo $this->Html->script('bootstrap.min');

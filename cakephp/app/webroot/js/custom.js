@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
 
 	$('#register-btn').click(function(){
@@ -79,27 +78,27 @@ $(document).ready(function() {
 		});
 	});
 
-	$('#end').datepicker({
+	$('#EventEnd').datepicker({
 		format: 'yyyy-mm-dd'
 	});
-	$('#start').datepicker({
+	$('#EventStart').datepicker({
 		format: 'yyyy-mm-dd'
 	});
 
-	$('#start').datepicker().on('changeDate', function(e){
-		var start_date = $('#start').datepicker('getDate');
-		var end_date = $('#end').datepicker('getDate');
+	$('#EventStart').datepicker().on('changeDate', function(e){
+		var start_date = $('#EventStart').datepicker('getDate');
+		var end_date = $('#EventEnd').datepicker('getDate');
 		// if end date is less than start date, remove it
 		if (start_date > end_date)
-			$('#end').datepicker('update', e.date);
+			$('#EventEnd').datepicker('update', e.date);
     });
 
-    $('#end').datepicker().on('changeDate', function(e){
-		var start_date = $('#start').datepicker('getDate');
-		var end_date = $('#end').datepicker('getDate');
+    $('#EventEnd').datepicker().on('changeDate', function(e){
+		var start_date = $('#EventStart').datepicker('getDate');
+		var end_date = $('#EventEnd').datepicker('getDate');
 		// if end date is less than start date, remove it
 		if (end_date < start_date)
-			$('#start').datepicker('update', e.date);
+			$('#EventStart').datepicker('update', e.date);
 
     });
 
@@ -119,32 +118,6 @@ $(document).ready(function() {
 				$('#googleCalendarSubmitModal').modal('hide');
 				$('#google-calendar-form')[0].reset();
 				$('#calendar').fullCalendar( 'addEventSource', result[0] );
-			}
-		});
-	})
-
-	//This is executed when the user submits/updates events
-	$('#event-form').submit(function (e) {
-		var update = $("#event-form #update").val();
-		e.preventDefault();
-		$.ajax({
-			type: 'post',
-			url: 'submit-event.php',
-			data: $(this).serialize() + "&type=submit",
-			dataType: 'json',
-			success: function (result) {
-				$('#eventSubmitModal').modal('hide');
-				console.log(JSON.stringify(result))
-				if(update == 0)
-					$('#calendar').fullCalendar( 'renderEvent', result[0], true )
-				else{
-					var event = $('#calendar').fullCalendar( 'clientEvents' ,update );
-					$.each(result[0], function(k, v) {
-						var obj = {};
-						event[0][k] = v;
-					});
-					$('#calendar').fullCalendar('updateEvent', event[0]);
-				}
 			}
 		});
 	})
@@ -184,18 +157,18 @@ $(document).ready(function() {
 						url: "events.json"
 					}]
 				;
-			// var googleEvents;
-			// $.ajax({
-			// 	type: 'post',
-			// 	url: '<?php echo Router::url(array('controller'=>'Events','action'=>'index'));?>',
-			// 	dataType: 'json',
-			// 	success: function (result) {
-			// 		for ( var i = 0; i < result.length; i++ ) {
-			// 			$('#calendar').fullCalendar( 'addEventSource', result[i] );
-			// 		}
-			// 		$('#calendar').fullCalendar( 'refetchEvents' )
-			// 	}
-			// });
+			var googleEvents;
+			$.ajax({
+				type: 'get',
+				url: 'google_calendars.json',
+				dataType: 'json',
+				success: function (result) {
+					for ( var i = 0; i < result.length; i++ ) {
+						$('#calendar').fullCalendar( 'addEventSource', result[i] );
+					}
+					$('#calendar').fullCalendar( 'refetchEvents' )
+				}
+			});
 			return JSONEvents;
 	}
 
@@ -216,9 +189,9 @@ $(document).ready(function() {
 			var month = start.getMonth() + 1; //Months are zero based
 			var year = start.getFullYear();
 			var date =  year + '-' + ('0' + (month)).slice(-2) + '-' + ('0' + date).slice(-2);
-			$('#start').datepicker('update', date);
-			$('#end').datepicker('update', date);
-			$('#start').val(date);
+			$('#EventStart').datepicker('update', date);
+			$('#EventStart').val(date);
+			$('#EventEnd').datepicker('update', date);
 			$('#eventSubmitModal').modal('show');
 		},
 			editable: true,
@@ -272,3 +245,21 @@ $(document).ready(function() {
 	});
 
 });
+
+//This is executed when the user submits/updates events
+//need to check alert state of callback
+function submitSuccess(result) {
+	alert(result);
+	$('#eventSubmitModal').modal('hide');
+	console.log(JSON.stringify(result))
+	if(update == 0)
+		$('#calendar').fullCalendar( 'renderEvent', result[0], true )
+	else{
+		var event = $('#calendar').fullCalendar( 'clientEvents' ,update );
+		$.each(result[0], function(k, v) {
+			var obj = {};
+			event[0][k] = v;
+		});
+		$('#calendar').fullCalendar('updateEvent', event[0]);
+	}
+}
