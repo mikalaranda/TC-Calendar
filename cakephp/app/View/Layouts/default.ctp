@@ -14,7 +14,7 @@
 		echo $this->Html->css('fullcalendar');
 		echo $this->Html->css('fullcalendar.print', array('media' => 'print'));
 
-		echo $this->Html->script('https://code.jquery.com/jquery.js');
+		echo $this->Html->script('jquery.min');
 		echo $this->Html->script('bootstrap.min');
 		echo $this->Html->script('jquery-ui.custom.min');
 		echo $this->Html->script('fullcalendar.min');
@@ -61,7 +61,7 @@
 		
 			</ul>
 			<div class="navleft text-muted pull-left">
-				<img class = "tclogo" src = "http://www.tzuchi.org.sg/eng/images/intro/edu/jy006logo.jpg">
+				<img class = "tclogo" src = "img/tzuchinglogo.jpg">
 				<h1>TC-Calendar</h1>
 			</div>
 		</div>
