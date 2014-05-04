@@ -9,7 +9,7 @@
 				'format' => array('before', 'label', 'between', 'input', 'after'),
 				'div' => array('class' => 'form-group'),
 				'label' => array('class' => 'col-sm-3 control-label'),
-				'between' => '<div class="col-sm-8">',
+				'between' => '<div class="col-sm-7">',
 				'after' => '</div>'
 			)));?>
 				<div class="modal-header">

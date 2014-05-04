@@ -2,6 +2,14 @@ $(document).ready(function() {
 
 	$('#event-form').validate();
 
+	$('#google-calendar-form').validate({
+		rules: {
+			"data[GoogleCalendar][url]": {
+				url:true
+			}
+		}
+	});
+
 	$('#register-btn').click(function(){
 		$('#registrationModal').modal('show');
 	});
@@ -9,57 +17,40 @@ $(document).ready(function() {
 	$('#registration-form').validate({
 		//debug: true,
 		rules: {
-			username: {
-				required: true,
-				minlength: 6
+			'data[User][username]': {
+				required: true
 			},
-			password: {
-				required: true,
-				minlength: 6
+			'data[User][password]': {
+				required: true
 			},
-			email: {
+			'data[User][email]': {
 				required: true,
 				email: true
 			}
 		},
 		messages: {
-			username: {
+			'data[User][username]': {
 				required: "Please specify a username",
 				minlength: "Username has to be more than 6 characters long."
 			},
-			password: {
+			'data[User][password]': {
 				required: "Please specify a password",
 				minlength: "Password has to be more than 6 characters long."
 			},
-			email: {
+			'data[User][email]': {
 				required: "We need your email address to contact you",
 				email: "Your email address must be in the format of name@domain.com"
 			}
-		},
-	    submitHandler: function(form) {
-			$.ajax({
-				type: 'post',
-				url: 'submit-user.php',
-				data: $("#registration-form").serialize() + "&type=register",
-				success: function (result) {
-					if(result == "Success"){
-						$('#registrationModal').modal('hide');
-						$('#registration-form')[0].reset();
-					}else{
-						$("#registrationModal #error").html(result);
-					}
-				}
-			});
-	    }
+		}
 	});
 
 
-	$("#login-form").submit(function(e) {
+	$("#UserIndexForm").submit(function(e) {
 		e.preventDefault();
 		$.ajax({
 			type: 'post',
-			url: 'submit-user.php',
-			data: $(this).serialize() + "&type=login",
+			url: 'users/login',
+			data: $(this).serialize(),
 			success: function (result) {
 				if(result == "Success")
 					location.reload();
@@ -108,22 +99,6 @@ $(document).ready(function() {
     $('#google-calendar-button').click(function(){
     	$('#googleCalendarSubmitModal').modal('show');
     });
-
-	//This is executed when the user submits google calendar
-	$('#google-calendar-form').submit(function (e) {
-		e.preventDefault();
-		$.ajax({
-			type: 'post',
-			url: 'submit-event.php',
-			data: $(this).serialize() + "&type=google",
-			dataType: 'json',
-			success: function (result) {
-				$('#googleCalendarSubmitModal').modal('hide');
-				$('#google-calendar-form')[0].reset();
-				$('#calendar').fullCalendar( 'addEventSource', result[0] );
-			}
-		});
-	})
 
 	function getEvents(){
 			//get db events
@@ -253,4 +228,20 @@ function loadEvent (result) {
 	if(result.allDay == 1)
 		$('#EventAllDay').prop('checked', true);
 	$('#eventSubmitModal').modal('show');
+}
+//This is executed when the user submits google calendar
+function gcalSubmitSuccess(result) {
+	$('#googleCalendarSubmitModal').modal('hide');
+	$('#google-calendar-form')[0].reset();
+	$('#calendar').fullCalendar( 'addEventSource', result );
+		
+}
+
+function userSubmitSuccess(result) {
+	if(result == "Success"){
+		$('#registrationModal').modal('hide');
+		$('#registration-form')[0].reset();
+	}else{
+		$("#registrationModal #error").html(result);
+	}
 }

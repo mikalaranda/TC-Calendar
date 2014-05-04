@@ -71,6 +71,7 @@ CREATE TABLE `users` (
   `username` varchar(65) NOT NULL,
   `password` varchar(32) NOT NULL,
   `email` varchar(255) NOT NULL,
+  `role` varchar(20),
   `created` DATETIME DEFAULT NULL,
   `modified` DATETIME DEFAULT NULL,
   PRIMARY KEY (`id`),

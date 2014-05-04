@@ -29,6 +29,9 @@
 	?>
 </head>
 <body>
+	<?php if (AuthComponent::user('id')): ?>
+   Logged in as <?= AuthComponent::user('name') ?>
+<?php endif; ?>
 	<div class="container-fluid">
 		<div class="header">
 			<ul class="nav nav-pills pull-right">
